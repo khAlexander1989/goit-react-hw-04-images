@@ -13,3 +13,30 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* ---------СБРОС ВНЕШНИХ ОТСТУПОВ--------- */
+
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+p,
+ul {
+  margin: 0px;
+  padding: 0px;
+}
+
+/* ---------СБРОС СТИЛИЗАЦИИ СПИСКОВ--------- */
+
+ul {
+  list-style: none;
+}
+
+/* ---------СБРОС ИЗОБРАЖЕНИЙ ПО УМОЛЧАНИЮ--------- */
+
+img {
+  max-width: 100%;
+  display: block;
+}
