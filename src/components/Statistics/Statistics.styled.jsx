@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const StatField = styled.li`
   display: flex;
   justify-content: space-between;
-  font-size: ${p => p.theme.fontSizes[3]};
+  font-size: ${p => p.theme.fontSizes[2]};
   color: ${p => p.theme.colors.textDarkGrey};
 `;
 

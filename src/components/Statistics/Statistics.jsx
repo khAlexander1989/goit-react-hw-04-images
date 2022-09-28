@@ -7,7 +7,7 @@ export function Statistics(props) {
   const { good, neutral, bad, total, positivePercentage } = props;
 
   return (
-    <Box as="ul" pt={3}>
+    <Box as="ul" pt={2} width="100%">
       <StatField>
         <StatFieldName>Good:Good:</StatFieldName>{' '}
         <StatFieldValue>{good}</StatFieldValue>

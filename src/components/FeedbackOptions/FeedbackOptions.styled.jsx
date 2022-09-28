@@ -4,6 +4,7 @@ import { getColorByType } from 'utils';
 
 export const BtnGroup = styled.ul`
   display: flex;
+  margin-top: ${p => p.theme.space[2]};
 `;
 export const BtnGroupItem = styled.li`
   display: flex;
@@ -20,7 +21,7 @@ export const BtnGroupItem = styled.li`
 export const FeedbackLabel = styled.span`
   margin-top: ${p => p.theme.space[2]};
 
-  font-size: ${p => p.theme.fontSizes[3]};
+  font-size: ${p => p.theme.fontSizes[2]};
   font-weight: ${p => p.theme.fontWeights.bold};
   color: ${p => getColorByType(p.children)};
 `;

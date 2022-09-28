@@ -5,7 +5,7 @@ import { Title } from './Section.styled';
 
 export function Section({ title, children }) {
   return (
-    <Box pl={2} pt={3} width="450px">
+    <Box pl={2} pt={2}>
       {title && <Title>{title}</Title>}
       {children}
     </Box>

@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import { getColorByType } from 'utils';
 
 export const Btn = styled.button`
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   padding: 0;
   background-color: transparent;
   border: none;
