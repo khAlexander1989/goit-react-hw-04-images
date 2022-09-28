@@ -14,8 +14,10 @@ export const Btn = styled.button`
 
   transition: transform 250ms ease-in-out, box-shadow 250ms ease-in-out;
 
-  :hover {
+  :hover,
+  :focus {
     transform: scale(1.2);
+    outline: none;
     box-shadow: 3px 3px 3px 0px rgba(0, 0, 0, 0.5);
   }
 
