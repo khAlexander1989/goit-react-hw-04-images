@@ -16,18 +16,21 @@ export const theme = {
 
   colors: {
     bgPrimary: '#FFFFFF',
-    bgSecondary: '#F3F6F9',
+    bgSecondary: '#F0CEB8',
+
     textPrimary: '#A9B3BD',
     textSecondary: '#122236',
     textWhite: '#FFFFFF',
     textBlack: '#000000',
+    textDarkGrey: '#444444',
 
-    red: '#E54D62',
+    red: '#FF0000',
     green: '#53AD54',
     skyBlue: '#00BCD5',
 
     borderWhite: '#FFFFFF',
     borderPaleBlue: '#EFEFEF',
+    borderWarm: '#B87145',
   },
 
   radii: {
