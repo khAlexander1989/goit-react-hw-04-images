@@ -5,7 +5,6 @@ import { Section } from 'components/Section';
 import { FeedbackOptions } from 'components/FeedbackOptions';
 import { Statistics } from 'components/Statistics';
 import { Notification } from 'components/Notification';
-import options from '../../options';
 
 export class App extends Component {
   state = {
@@ -49,7 +48,7 @@ export class App extends Component {
       >
         <Section title="Please leave feedback">
           <FeedbackOptions
-            options={options.feedbackTypes}
+            options={Object.keys(this.state)}
             onLeaveFeedback={this.incrementStatFieldValueByName}
           />
         </Section>
