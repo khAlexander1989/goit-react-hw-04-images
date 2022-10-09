@@ -32,6 +32,7 @@ export class App extends Component {
 
       try {
         const fetchedImages = await fetchImages(searchQuery, currentPage);
+
         this.setState(prevState => ({
           images: [...prevState.images, ...fetchedImages.hits],
         }));
@@ -41,7 +42,11 @@ export class App extends Component {
             fetchedImages.hits.length >= IMAGE_PER_PAGE ? true : false,
         });
       } catch (err) {
-        this.setState({ error: err.message });
+        if (err.code === 'ERR_NETWORK') {
+          this.setState({ error: "Sorry, this page isn't available." });
+        } else {
+          this.setState({ error: err.message });
+        }
       } finally {
         this.setState({ isLoading: false });
       }
@@ -61,18 +66,9 @@ export class App extends Component {
   incrementCurrentPage = () =>
     this.setState(({ currentPage }) => ({ currentPage: currentPage + 1 }));
 
-  toggleLoadMoreBtn() {
-    this.setState(({ isLoadMoreBtnShown }) => ({
-      isLoadMoreBtnShown: !isLoadMoreBtnShown,
-    }));
-  }
-
   render() {
     const { images, isLoading, isLoadMoreBtnShown, error } = this.state;
 
-    // const isBtnShown = images.length >= IMAGE_PER_PAGE;
-    // console.log('isBtnShown: ', isBtnShown);
-    // console.log('isBtnShown: ', isBtnShown);
     return (
       <Container>
         <Searcbar onSubmit={this.handleSubmit} />
@@ -82,10 +78,8 @@ export class App extends Component {
           <ImageGallery images={images} />
         )}
         {isLoading && <ImageGallerySkeleton />}
-        {isLoadMoreBtnShown ? (
+        {isLoadMoreBtnShown && (
           <LoadMoreButton onClick={this.incrementCurrentPage} />
-        ) : (
-          <h1>Image is over</h1>
         )}
       </Container>
     );

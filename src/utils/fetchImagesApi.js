@@ -8,11 +8,7 @@ export async function fetchImages(keyword, page) {
 
   const response = await axios(queryParams);
 
-  console.log(response.data);
-
   if (!response.data.totalHits) {
-    console.log(response.data);
-    console.log('there is not find any message');
     throw new Error('Sorry, we couldn’t find any image for your search(');
   }
 

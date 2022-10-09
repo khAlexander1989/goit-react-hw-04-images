@@ -10,7 +10,6 @@ export const ErrContainer = styled.div`
   justify-content: center;
 
   margin: 0 auto;
-  /* background-color: teal; */
 `;
 
 export const ErrCode = styled.h1`
@@ -19,8 +18,6 @@ export const ErrCode = styled.h1`
 `;
 
 export const ErrMsg = styled.p`
-  /* margin-top: ${p => p.theme.space[3]}; */
-
   font-size: ${p => p.theme.fontSizes[4]};
   font-weight: ${p => p.theme.fontWeights.bold};
 
