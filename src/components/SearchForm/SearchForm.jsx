@@ -14,14 +14,15 @@ export class SearchForm extends Component {
   };
 
   handleSubmit = event => {
+    const { searchQuery } = this.state;
+    const { onSubmit } = this.props;
     event.preventDefault();
-    this.props.onSubmit(this.state.searchQuery.trim().toLowerCase());
-    this.resetForm();
-  };
 
-  resetForm() {
-    this.setState({ searchQuery: '' });
-  }
+    if (!searchQuery.trim()) {
+      return;
+    }
+    onSubmit(searchQuery.trim().toLowerCase());
+  };
 
   render() {
     const { searchQuery } = this.state;
