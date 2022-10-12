@@ -11,7 +11,7 @@ import { ImageGallerySkeleton } from 'components/ImageGallery';
 import { ErrorMessage } from 'components/ErrorMessage';
 import { STATUS } from 'utils/constants';
 
-const initState = {
+const initialState = {
   searchQuery: '',
   currentPage: 1,
   images: [],
@@ -21,7 +21,7 @@ const initState = {
 };
 
 export class App extends Component {
-  state = { ...initState };
+  state = { ...initialState };
 
   async componentDidUpdate(_, prevState) {
     const { currentPage, searchQuery } = this.state;
@@ -57,7 +57,7 @@ export class App extends Component {
       return;
     }
     this.setState({
-      ...initState,
+      ...initialState,
       searchQuery: query,
     });
   };
