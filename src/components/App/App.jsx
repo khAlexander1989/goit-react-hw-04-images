@@ -2,6 +2,7 @@ import { Component } from 'react';
 
 import { fetchImages } from 'utils/fetchImagesApi';
 
+import { Box } from 'components/Box';
 import { Searcbar } from 'components/Searchbar';
 import { ImageGallery } from 'components/ImageGallery';
 import { LoadMoreButton } from 'components/LoadMoreButton';
@@ -71,6 +72,11 @@ export class App extends Component {
     return (
       <Container>
         <Searcbar onSubmit={this.handleSubmit} />
+        {status === STATUS.IDLE && (
+          <Box as="p" ml={2}>
+            There is no any image in the gallery.
+          </Box>
+        )}
         {status === STATUS.REJECTED && <ErrorMessage msg={error} />}
         {(status === STATUS.RESOLVED || status === STATUS.PENDING) && (
           <ImageGallery images={images} />
