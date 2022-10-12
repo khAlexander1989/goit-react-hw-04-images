@@ -1,6 +1,5 @@
 import { Component } from 'react';
 
-import { IMAGE_PER_PAGE } from 'utils/constants';
 import { fetchImages } from 'utils/fetchImagesApi';
 
 import { Searcbar } from 'components/Searchbar';
