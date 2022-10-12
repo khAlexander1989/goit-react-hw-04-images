@@ -14,8 +14,8 @@ const initState = {
   searchQuery: '',
   currentPage: 1,
   images: [],
+  totalImages: 0,
   isLoading: false,
-  isLoadMoreBtnShown: false,
   error: null,
 };
 
@@ -35,12 +35,8 @@ export class App extends Component {
 
         this.setState(prevState => ({
           images: [...prevState.images, ...fetchedImages.hits],
+          totalImages: fetchedImages.totalHits,
         }));
-
-        this.setState({
-          isLoadMoreBtnShown:
-            fetchedImages.hits.length >= IMAGE_PER_PAGE ? true : false,
-        });
       } catch (err) {
         if (err.code === 'ERR_NETWORK') {
           this.setState({ error: "Sorry, this page isn't available." });
@@ -67,7 +63,8 @@ export class App extends Component {
     this.setState(({ currentPage }) => ({ currentPage: currentPage + 1 }));
 
   render() {
-    const { images, isLoading, isLoadMoreBtnShown, error } = this.state;
+    const { images, totalImages, isLoading, error } = this.state;
+    const isLoadMoreBtnShown = images.length < totalImages;
 
     return (
       <Container>
