@@ -8,14 +8,15 @@ import { LoadMoreButton } from 'components/LoadMoreButton';
 import { Container } from './App.styled';
 import { ImageGallerySkeleton } from 'components/ImageGallery';
 import { ErrorMessage } from 'components/ErrorMessage';
+import { STATUS } from 'utils/constants';
 
 const initState = {
   searchQuery: '',
   currentPage: 1,
   images: [],
   totalImages: 0,
-  isLoading: false,
   error: null,
+  status: STATUS.IDLE,
 };
 
 export class App extends Component {
@@ -27,7 +28,7 @@ export class App extends Component {
       searchQuery !== prevState.searchQuery ||
       currentPage !== prevState.currentPage
     ) {
-      this.setState({ isLoading: true });
+      this.setState({ status: STATUS.PENDING });
 
       try {
         const fetchedImages = await fetchImages(searchQuery, currentPage);
@@ -36,14 +37,16 @@ export class App extends Component {
           images: [...prevState.images, ...fetchedImages.hits],
           totalImages: fetchedImages.totalHits,
         }));
+
+        this.setState({ status: STATUS.RESOLVED });
       } catch (err) {
+        this.setState({ status: STATUS.REJECTED });
+
         if (err.code === 'ERR_NETWORK') {
           this.setState({ error: "Sorry, this page isn't available." });
         } else {
           this.setState({ error: err.message });
         }
-      } finally {
-        this.setState({ isLoading: false });
       }
     }
   }
@@ -62,18 +65,17 @@ export class App extends Component {
     this.setState(({ currentPage }) => ({ currentPage: currentPage + 1 }));
 
   render() {
-    const { images, totalImages, isLoading, error } = this.state;
+    const { images, totalImages, error, status } = this.state;
     const isLoadMoreBtnShown = images.length < totalImages;
 
     return (
       <Container>
         <Searcbar onSubmit={this.handleSubmit} />
-        {error ? (
-          <ErrorMessage msg={error} />
-        ) : (
+        {status === STATUS.REJECTED && <ErrorMessage msg={error} />}
+        {(status === STATUS.RESOLVED || status === STATUS.PENDING) && (
           <ImageGallery images={images} />
         )}
-        {isLoading && <ImageGallerySkeleton />}
+        {status === STATUS.PENDING && <ImageGallerySkeleton />}
         {isLoadMoreBtnShown && (
           <LoadMoreButton onClick={this.incrementCurrentPage} />
         )}
