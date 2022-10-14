@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 
 import { fetchImages } from 'utils/fetchImagesApi';
 
@@ -11,81 +11,69 @@ import { ImageGallerySkeleton } from 'components/ImageGallery';
 import { ErrorMessage } from 'components/ErrorMessage';
 import { STATUS } from 'utils/constants';
 
-const initialState = {
-  searchQuery: '',
-  currentPage: 1,
-  images: [],
-  totalImages: 0,
-  error: null,
-  status: STATUS.IDLE,
-};
+export function App() {
+  const [query, setQuery] = useState('');
+  const [page, setPage] = useState(1);
+  const [images, setImages] = useState([]);
+  const [totalImages, setTotalImages] = useState(0);
+  const [error, setError] = useState(null);
+  const [status, setStatus] = useState(STATUS.IDLE);
 
-export class App extends Component {
-  state = { ...initialState };
-
-  async componentDidUpdate(_, prevState) {
-    const { currentPage, searchQuery } = this.state;
-    if (
-      searchQuery !== prevState.searchQuery ||
-      currentPage !== prevState.currentPage
-    ) {
-      this.setState({ status: STATUS.PENDING });
-
-      try {
-        const fetchedImages = await fetchImages(searchQuery, currentPage);
-
-        this.setState(prevState => ({
-          images: [...prevState.images, ...fetchedImages.hits],
-          totalImages: fetchedImages.totalHits,
-        }));
-
-        this.setState({ status: STATUS.RESOLVED });
-      } catch (err) {
-        this.setState({ status: STATUS.REJECTED });
-
-        if (err.code === 'ERR_NETWORK') {
-          this.setState({ error: "Sorry, this page isn't available." });
-        } else {
-          this.setState({ error: err.message });
-        }
-      }
+  useEffect(() => {
+    if (query) {
+      setStatus(STATUS.PENDING);
+      fetchImages(query, page)
+        .then(data => {
+          setImages(prevImages => [...prevImages, ...data.hits]);
+          setTotalImages(data.totalHits);
+          setStatus(STATUS.RESOLVED);
+        })
+        .catch(err => {
+          setStatus(STATUS.REJECTED);
+          if (err.code === 'ERR_NETWORK') {
+            setError("Sorry, this page isn't available.");
+          } else {
+            setError(err.message);
+          }
+        });
     }
+  }, [page, query]);
+
+  function resetState() {
+    setQuery('');
+    setPage(1);
+    setImages([]);
+    setTotalImages(0);
+    setError(null);
+    setStatus(STATUS.IDLE);
   }
 
-  handleSubmit = query => {
-    if (this.state.searchQuery === query) {
+  function handleSubmit(q) {
+    if (query === q) {
       return;
     }
-    this.setState({
-      ...initialState,
-      searchQuery: query,
-    });
-  };
-
-  incrementCurrentPage = () =>
-    this.setState(({ currentPage }) => ({ currentPage: currentPage + 1 }));
-
-  render() {
-    const { images, totalImages, error, status } = this.state;
-    const isLoadMoreBtnShown = images.length < totalImages;
-
-    return (
-      <Container>
-        <Searcbar onSubmit={this.handleSubmit} />
-        {status === STATUS.IDLE && (
-          <Box as="p" ml={2}>
-            There is no any image in the gallery.
-          </Box>
-        )}
-        {status === STATUS.REJECTED && <ErrorMessage msg={error} />}
-        {(status === STATUS.RESOLVED || status === STATUS.PENDING) && (
-          <ImageGallery images={images} />
-        )}
-        {status === STATUS.PENDING && <ImageGallerySkeleton />}
-        {isLoadMoreBtnShown && (
-          <LoadMoreButton onClick={this.incrementCurrentPage} />
-        )}
-      </Container>
-    );
+    resetState();
+    setQuery(q);
   }
+
+  const renderLoadMoreBtn = images.length < totalImages;
+
+  return (
+    <Container>
+      <Searcbar onSubmit={handleSubmit} />
+      {status === STATUS.IDLE && (
+        <Box as="p" ml={2}>
+          There is no any image in the gallery.
+        </Box>
+      )}
+      {status === STATUS.REJECTED && <ErrorMessage msg={error} />}
+      {(status === STATUS.RESOLVED || status === STATUS.PENDING) && (
+        <ImageGallery images={images} />
+      )}
+      {status === STATUS.PENDING && <ImageGallerySkeleton />}
+      {renderLoadMoreBtn && (
+        <LoadMoreButton onClick={() => setPage(prevPage => prevPage + 1)} />
+      )}
+    </Container>
+  );
 }

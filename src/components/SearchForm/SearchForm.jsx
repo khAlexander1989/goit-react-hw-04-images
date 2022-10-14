@@ -1,49 +1,37 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { BsSearch } from 'react-icons/bs';
 
 import { Form, FormBtn, FormInput } from './SearchForm.styled';
 
-export class SearchForm extends Component {
-  state = {
-    searchQuery: '',
-  };
+export function SearchForm({ onSubmit }) {
+  const [query, setQuery] = useState('');
 
-  handleInputChange = ({ target: { value } }) => {
-    this.setState({ searchQuery: value });
-  };
-
-  handleSubmit = event => {
-    const { searchQuery } = this.state;
-    const { onSubmit } = this.props;
+  function handleSubmit(event) {
     event.preventDefault();
 
-    if (!searchQuery.trim()) {
+    if (!query.trim()) {
       return;
     }
-    onSubmit(searchQuery.trim().toLowerCase());
-  };
-
-  render() {
-    const { searchQuery } = this.state;
-
-    return (
-      <Form onSubmit={this.handleSubmit}>
-        <FormBtn type="submit" aria-label="search form submit button">
-          <BsSearch size="70%" />
-        </FormBtn>
-
-        <FormInput
-          type="text"
-          autoComplete="off"
-          autoFocus
-          placeholder="Search images and photos"
-          onChange={this.handleInputChange}
-          value={searchQuery}
-        />
-      </Form>
-    );
+    onSubmit(query.trim().toLowerCase());
   }
+
+  return (
+    <Form onSubmit={handleSubmit}>
+      <FormBtn type="submit" aria-label="search form submit button">
+        <BsSearch size="70%" />
+      </FormBtn>
+
+      <FormInput
+        type="text"
+        autoComplete="off"
+        autoFocus
+        placeholder="Search images and photos"
+        onChange={({ target: { value } }) => setQuery(value)}
+        value={query}
+      />
+    </Form>
+  );
 }
 
 SearchForm.propTyeps = {
